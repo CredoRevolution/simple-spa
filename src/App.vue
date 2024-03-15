@@ -4,8 +4,9 @@
     <header>
       <h1>Vue.js SPA</h1>
     </header>
-    <main>
+    <main class="container-flex">
       <aside class="sidebar">
+        <h2>Posts</h2>
         <router-link
           v-for="post in posts"
           :key="post.id"
@@ -15,7 +16,12 @@
         </router-link>
       </aside>
       <div class="content">
-        <router-view></router-view>
+        <router-view>
+          <!-- if is home route -->
+          <p v-if="$route.name === 'home'">This is Home</p>
+          <!-- if loading -->
+          <p v-else>Loading...</p>
+        </router-view>
       </div>
     </main>
   </div>
@@ -48,12 +54,30 @@ export default {
         })
     },
   },
+  watch: {
+    // if is not home route
+    $route(to) {
+      if (to.name !== 'home') {
+        this.getPosts()
+      }
+    },
+  },
 }
 </script>
 
 <style>
 aside {
   width: 30%;
-  float: left;
+  display: flex;
+  flex-direction: column;
+}
+.container-flex {
+  display: flex;
+  flex-direction: row;
+}
+.content .post {
+  position: sticky;
+  top: 50%;
+  transform: translateY(-50%);
 }
 </style>
